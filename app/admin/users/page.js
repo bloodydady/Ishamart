@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getUsers, updateUserRole } from '@/lib/firestore';
+import { getAllUsers, updateUserRole } from '@/lib/firestore';
 import { formatDate } from '@/lib/utils';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { FiSearch, FiShield, FiUser, FiMoreVertical } from 'react-icons/fi';
@@ -19,7 +19,7 @@ export default function AdminUsers() {
 
   const fetchUsers = async () => {
     setLoading(true);
-    const { users: data } = await getUsers();
+    const { users: data } = await getAllUsers();
     setUsers(data || []);
     setLoading(false);
   };
