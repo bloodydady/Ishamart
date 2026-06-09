@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createAllRounderEnquiry, getSettings } from '@/lib/firestore';
-import { ALLROUNDER_SERVICES } from '@/lib/utils';
+import { createAllRounderEnquiry, getSettings, getAllProducts } from '@/lib/firestore';
+import { ALLROUNDER_SERVICES, getDriveImageUrl, formatPrice } from '@/lib/utils';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { FiPhone, FiMapPin, FiClock, FiSend, FiCheckCircle } from 'react-icons/fi';
+import { FiPhone, FiMapPin, FiClock, FiSend, FiCheckCircle, FiShoppingCart } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 export default function AllRounderPage() {
   const [settings, setSettings] = useState(null);
@@ -22,12 +23,15 @@ export default function AllRounderPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const [listings, setListings] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const [settingsRes, descRes] = await Promise.all([
+      const [settingsRes, descRes, productsRes] = await Promise.all([
         getSettings('allrounder'),
-        getSettings('allrounderServices')
+        getSettings('allrounderServices'),
+        getAllProducts()
       ]);
       
       setSettings(settingsRes.settings || {
@@ -37,6 +41,12 @@ export default function AllRounderPage() {
         about: ''
       });
       setServicesDesc(descRes.settings || {});
+
+      // Filter houses and plots
+      if (productsRes.products) {
+        setListings(productsRes.products.filter(p => p.category === 'house' || p.category === 'plots'));
+      }
+
       setLoading(false);
     }
     fetchData();
@@ -153,6 +163,51 @@ export default function AllRounderPage() {
           </div>
         </div>
       </section>
+
+      {/* Houses and Plots Listings */}
+      {listings.length > 0 && (
+        <section className="py-20 bg-gray-50 border-t border-gray-200">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Featured Properties & Plots</h2>
+              <div className="w-24 h-1 bg-[var(--color-primary)] mx-auto rounded-full mb-4"></div>
+              <p className="text-gray-600 max-w-2xl mx-auto">Explore our exclusive real estate listings available right now in your area.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {listings.map(product => (
+                <Link href={`/product/${product.id}`} key={product.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group border border-gray-100 flex flex-col transform hover:-translate-y-2">
+                  <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
+                    <img 
+                      src={getDriveImageUrl(product.imageUrl)} 
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      onError={(e) => { e.target.src = '/placeholder.png' }}
+                    />
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-[var(--color-primary)] shadow-sm">
+                      {product.category === 'house' ? '🏠 House' : '🌍 Plot'}
+                    </div>
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-xl font-bold text-gray-900 line-clamp-2">{product.name}</h3>
+                    </div>
+                    <p className="text-sm text-gray-500 mb-4 line-clamp-2 flex-1">{product.description}</p>
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div className="text-2xl font-black text-[var(--color-primary)]">
+                        {formatPrice(product.price)}
+                      </div>
+                      <span className="bg-[var(--color-secondary)] hover:bg-[var(--color-secondary-dark)] text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                        <FiShoppingCart />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Why Choose Us */}
       <section className="py-16 bg-[var(--color-primary-dark)] text-white">
