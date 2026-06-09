@@ -116,11 +116,8 @@ export default function Navbar() {
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
-                    <Link href="/login" className="text-gray-700 hover:text-[var(--color-primary)] font-medium text-sm transition-colors">
-                      Login
-                    </Link>
-                    <Link href="/register" className="bg-gray-100 hover:bg-gray-200 text-gray-900 px-4 py-2 rounded-full font-medium text-sm transition-colors">
-                      Register
+                    <Link href="/login" className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white px-5 py-2 rounded-full font-medium text-sm transition-colors shadow-sm">
+                      Login / Signup
                     </Link>
                   </div>
                 )}
@@ -233,11 +230,8 @@ export default function Navbar() {
                 ) : (
                   <div className="flex flex-col gap-3">
                     <p className="text-sm text-gray-600 text-center mb-2">Welcome to ISHAMART</p>
-                    <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="bg-[var(--color-primary)] text-white text-center py-2 rounded-lg font-medium">
-                      Login
-                    </Link>
-                    <Link href="/register" onClick={() => setMobileMenuOpen(false)} className="bg-white border border-gray-300 text-gray-700 text-center py-2 rounded-lg font-medium">
-                      Register
+                    <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)] text-white text-center py-2.5 rounded-lg font-medium transition-colors shadow-sm">
+                      Login / Signup
                     </Link>
                   </div>
                 )}
