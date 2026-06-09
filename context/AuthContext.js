@@ -23,6 +23,9 @@ export function AuthProvider({ children }) {
         const { profile } = await getUserProfile(firebaseUser.uid);
         if (profile) {
           setUserProfile(profile);
+          setIsAdmin(firebaseUser.email === 'monsteroflove1234@gmail.com' || profile.role === 'admin');
+        } else {
+          setIsAdmin(firebaseUser.email === 'monsteroflove1234@gmail.com');
         }
       } else {
         setUser(null);
