@@ -1,13 +1,39 @@
 'use client';
 
 import Link from 'next/link';
-import { FaFacebook, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaWhatsapp, FaPhoneAlt } from 'react-icons/fa';
 import { CATEGORIES } from '@/lib/utils';
 
 export default function Footer() {
   return (
     <footer className="bg-[var(--color-primary-dark)] text-white pt-16 pb-6 border-t-[8px] border-[var(--color-secondary)]">
       <div className="container mx-auto px-4">
+
+        {/* Founder Section */}
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-8 mb-12 backdrop-blur-sm">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-[var(--color-secondary)] shadow-xl flex-shrink-0">
+              <img src="/founder.png" alt="Isha Gupta - Founder of ISHAMART" className="w-full h-full object-cover" />
+            </div>
+            <div className="text-center md:text-left flex-1">
+              <p className="text-[var(--color-secondary)] text-sm font-bold uppercase tracking-widest mb-1">Founder</p>
+              <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-3">Isha Gupta</h3>
+              <p className="text-gray-300 leading-relaxed max-w-2xl">
+                ISHAMART was founded with a vision to bring quality products and essential services to every doorstep. 
+                From healthcare to electronics, our mission is to be your one-stop solution — trusted, affordable, and always available.
+              </p>
+              <div className="flex flex-wrap items-center gap-4 mt-4 justify-center md:justify-start">
+                <a href="tel:+917905611541" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full text-sm font-medium transition-colors">
+                  <FaPhoneAlt size={14} /> +91 79056 11541
+                </a>
+                <a href="https://www.instagram.com/p/DYhqZfpyCvP/?igsh=MWM0dnJmcGg4dGEzcw==" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white/10 hover:bg-[#E4405F] px-4 py-2 rounded-full text-sm font-medium transition-colors">
+                  <FaInstagram size={14} /> Follow on Instagram
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           
           {/* Column 1: Brand */}
@@ -15,17 +41,20 @@ export default function Footer() {
             <div className="bg-white p-2 rounded-xl inline-block w-48 mb-2">
               <img src="/logo.png" alt="ISHAMART" className="h-16 object-contain w-full" />
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed mb-4">
+            <p className="text-gray-300 text-sm leading-relaxed mb-2">
               Your local Indian marketplace for everything you need. From electronics to pathology services, we are your one-stop shop with best prices and fast delivery.
             </p>
-            <div className="flex items-center gap-4">
+            <a href="tel:+917905611541" className="text-[var(--color-secondary)] font-bold text-lg hover:text-orange-300 transition-colors flex items-center gap-2">
+              <FaPhoneAlt size={16} /> +91 79056 11541
+            </a>
+            <div className="flex items-center gap-4 mt-2">
               <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#1877F2] transition-colors">
                 <FaFacebook size={20} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#E4405F] transition-colors">
+              <a href="https://www.instagram.com/p/DYhqZfpyCvP/?igsh=MWM0dnJmcGg4dGEzcw==" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#E4405F] transition-colors">
                 <FaInstagram size={20} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#25D366] transition-colors">
+              <a href="https://wa.me/917905611541" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#25D366] transition-colors">
                 <FaWhatsapp size={20} />
               </a>
             </div>
@@ -39,7 +68,7 @@ export default function Footer() {
               <li><Link href="/shop" className="text-gray-300 hover:text-white hover:translate-x-1 inline-block transition-transform">Shop All</Link></li>
               <li><Link href="/cart" className="text-gray-300 hover:text-white hover:translate-x-1 inline-block transition-transform">My Cart</Link></li>
               <li><Link href="/orders" className="text-gray-300 hover:text-white hover:translate-x-1 inline-block transition-transform">My Orders</Link></li>
-              <li><Link href="/login" className="text-gray-300 hover:text-white hover:translate-x-1 inline-block transition-transform">Login / Register</Link></li>
+              <li><Link href="/login" className="text-gray-300 hover:text-white hover:translate-x-1 inline-block transition-transform">Login / Signup</Link></li>
             </ul>
           </div>
 
@@ -84,7 +113,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
           <p>&copy; {new Date().getFullYear()} ISHAMART. All Rights Reserved.</p>
-          <p>Made with ❤️ in India</p>
+          <p>Founded by Isha Gupta | Made with ❤️ in India</p>
         </div>
       </div>
     </footer>
