@@ -15,7 +15,7 @@ export default function ProfilePage() {
   const { user, userProfile, loading, refreshProfile } = useAuth();
   
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({ name: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', phone: '', altPhone: '', address: '', city: '', state: '', pincode: '' });
   const [isSaving, setIsSaving] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -33,12 +33,22 @@ export default function ProfilePage() {
     if (userProfile) {
       setFormData({
         name: userProfile.name || '',
-        phone: userProfile.phone || ''
+        phone: userProfile.phone || '',
+        altPhone: userProfile.altPhone || '',
+        address: userProfile.address || '',
+        city: userProfile.city || '',
+        state: userProfile.state || '',
+        pincode: userProfile.pincode || ''
       });
     } else if (user) {
       setFormData({
         name: user.displayName || '',
-        phone: ''
+        phone: '',
+        altPhone: '',
+        address: '',
+        city: '',
+        state: '',
+        pincode: ''
       });
     }
   }, [userProfile, user]);
@@ -142,8 +152,8 @@ export default function ProfilePage() {
                 )}
               </div>
 
-              <div className="space-y-6">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="col-span-1 md:col-span-2">
                   <label className="block text-sm font-medium text-gray-500 mb-1">Full Name</label>
                   {isEditing ? (
                     <div className="relative">
@@ -164,7 +174,7 @@ export default function ProfilePage() {
                   )}
                 </div>
 
-                <div>
+                <div className="col-span-1 md:col-span-2">
                   <label className="block text-sm font-medium text-gray-500 mb-1">Email Address</label>
                   <div className="text-lg font-medium text-gray-900 px-3 py-2 flex items-center gap-3 opacity-70">
                     <FiMail className="text-gray-400" /> {user.email} 
@@ -190,6 +200,97 @@ export default function ProfilePage() {
                   ) : (
                     <div className="text-lg font-medium text-gray-900 px-3 py-2 flex items-center gap-3">
                       <FiPhone className="text-gray-400" /> {userProfile?.phone || 'Not provided'}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Alternative Phone</label>
+                  {isEditing ? (
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FiPhone className="text-gray-400" />
+                      </div>
+                      <input
+                        type="tel"
+                        value={formData.altPhone}
+                        onChange={(e) => setFormData({...formData, altPhone: e.target.value})}
+                        className="pl-10 w-full px-4 py-2.5 rounded-xl border border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none bg-blue-50/30"
+                        placeholder="Optional"
+                      />
+                    </div>
+                  ) : (
+                    <div className="text-lg font-medium text-gray-900 px-3 py-2 flex items-center gap-3">
+                      <FiPhone className="text-gray-400" /> {userProfile?.altPhone || 'Not provided'}
+                    </div>
+                  )}
+                </div>
+
+                <div className="col-span-1 md:col-span-2 pt-4 border-t border-gray-100 mt-2">
+                  <h4 className="font-bold text-gray-900 mb-4">Delivery Address Details</h4>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Full Address (House No, Building, Street)</label>
+                  {isEditing ? (
+                    <textarea
+                      rows="3"
+                      value={formData.address}
+                      onChange={(e) => setFormData({...formData, address: e.target.value})}
+                      className="w-full px-4 py-2.5 rounded-xl border border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none bg-blue-50/30 resize-none"
+                      placeholder="Enter full address"
+                    ></textarea>
+                  ) : (
+                    <div className="text-lg font-medium text-gray-900 px-3 py-2">
+                      {userProfile?.address || 'Not provided'}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">City / District</label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={formData.city}
+                      onChange={(e) => setFormData({...formData, city: e.target.value})}
+                      className="w-full px-4 py-2.5 rounded-xl border border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none bg-blue-50/30"
+                      placeholder="e.g. Lucknow"
+                    />
+                  ) : (
+                    <div className="text-lg font-medium text-gray-900 px-3 py-2">
+                      {userProfile?.city || 'Not provided'}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">State</label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={formData.state}
+                      onChange={(e) => setFormData({...formData, state: e.target.value})}
+                      className="w-full px-4 py-2.5 rounded-xl border border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none bg-blue-50/30"
+                      placeholder="e.g. Uttar Pradesh"
+                    />
+                  ) : (
+                    <div className="text-lg font-medium text-gray-900 px-3 py-2">
+                      {userProfile?.state || 'Not provided'}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Pincode</label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={formData.pincode}
+                      onChange={(e) => setFormData({...formData, pincode: e.target.value})}
+                      className="w-full px-4 py-2.5 rounded-xl border border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none bg-blue-50/30"
+                      placeholder="6-digit pincode"
+                    />
+                  ) : (
+                    <div className="text-lg font-medium text-gray-900 px-3 py-2">
+                      {userProfile?.pincode || 'Not provided'}
                     </div>
                   )}
                 </div>

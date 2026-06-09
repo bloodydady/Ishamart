@@ -39,6 +39,9 @@ export default function CheckoutPage() {
         ...prev,
         name: userProfile.name || '',
         phone: userProfile.phone || '',
+        address: userProfile.address || '',
+        city: userProfile.city || '',
+        pincode: userProfile.pincode || '',
       }));
     } else if (user) {
       setFormData(prev => ({
