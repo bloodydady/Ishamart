@@ -18,6 +18,9 @@ export const metadata = {
     description: "Shop Everything Online - Electronics, Clothes, Shoes, Solar Panels & More",
     type: "website",
   },
+  verification: {
+    google: "vu1VP_uDktuvpgLZZk9lloDVZ1K4WQcKsie4kRC-MBk",
+  },
 };
 
 export default function RootLayout({ children }) {
