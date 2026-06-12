@@ -9,7 +9,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -19,13 +19,13 @@ export default function AdminLayout({ children }) {
 
   useEffect(() => {
     if (mounted && !loading) {
-      if (!user || !isAdminUser(user)) {
+      if (!user || !isAdmin) {
         router.push('/login');
       } else {
         setIsAuthorized(true);
       }
     }
-  }, [user, loading, mounted, router]);
+  }, [user, loading, isAdmin, mounted, router]);
 
   if (!mounted || loading || !isAuthorized) {
     return <LoadingSpinner fullScreen />;

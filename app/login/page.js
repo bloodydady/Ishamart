@@ -10,18 +10,18 @@ import toast from 'react-hot-toast';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
 
   useEffect(() => {
     if (!loading && user) {
-      if (isAdminUser(user)) {
+      if (isAdmin) {
         router.push('/admin');
       } else {
         router.push('/');
       }
     }
-  }, [user, loading, router]);
+  }, [user, loading, isAdmin, router]);
 
   const handleGoogleLogin = async () => {
     setIsGoogleSubmitting(true);
@@ -32,11 +32,7 @@ export default function LoginPage() {
       toast.error(error);
     } else {
       toast.success('Logged in successfully!');
-      if (isAdminUser(loggedInUser)) {
-        router.push('/admin');
-      } else {
-        router.push('/');
-      }
+      // Redirection is now handled by the useEffect watching the `user` and `isAdmin` context
     }
   };
 
