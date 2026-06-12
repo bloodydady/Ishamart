@@ -23,6 +23,7 @@ export default function ProductDetail({ params }) {
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [images, setImages] = useState([]);
   const [imgSrc, setImgSrc] = useState('/placeholder.png');
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -45,7 +46,12 @@ export default function ProductDetail({ params }) {
       }
       
       setProduct(pData);
-      setImgSrc(getDriveImageUrl(pData.imageUrl));
+      
+      const rawUrls = pData.imageUrl || '';
+      const parsedUrls = rawUrls.split(/[\s,]+/).filter(url => url.trim().length > 0);
+      const urlsToUse = parsedUrls.length > 0 ? parsedUrls : ['/placeholder.png'];
+      setImages(urlsToUse);
+      setImgSrc(getDriveImageUrl(urlsToUse[0]));
       
       const { reviews: rData } = await getProductReviews(productId);
       setReviews(rData || []);
@@ -150,16 +156,36 @@ export default function ProductDetail({ params }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
           
           {/* Left: Image Gallery */}
-          <div className="bg-gray-50 rounded-3xl p-6 md:p-12 border border-gray-100 flex items-center justify-center sticky top-24 aspect-square">
-            <img 
-              src={imgSrc} 
-              alt={product.name}
-              className="max-h-full max-w-full object-contain mix-blend-multiply"
-              onError={() => setImgSrc('/placeholder.png')}
-            />
-            {product.featured && (
-              <div className="absolute top-6 left-6 bg-[var(--color-secondary)] text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
-                Featured Product
+          <div className="flex flex-col gap-4">
+            <div className="bg-gray-50 rounded-3xl p-6 md:p-12 border border-gray-100 flex items-center justify-center sticky top-24 aspect-square relative">
+              <img 
+                src={imgSrc} 
+                alt={product.name}
+                className="max-h-full max-w-full object-contain mix-blend-multiply transition-all duration-300"
+                onError={() => setImgSrc('/placeholder.png')}
+              />
+              {product.featured && (
+                <div className="absolute top-6 left-6 bg-[var(--color-secondary)] text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
+                  Featured Product
+                </div>
+              )}
+            </div>
+            
+            {/* Thumbnails */}
+            {images.length > 1 && (
+              <div className="flex gap-3 overflow-x-auto py-2 custom-scrollbar">
+                {images.map((url, idx) => {
+                  const driveUrl = getDriveImageUrl(url);
+                  return (
+                    <button 
+                      key={idx}
+                      onClick={() => setImgSrc(driveUrl)}
+                      className={`w-20 h-20 rounded-xl border-2 flex-shrink-0 overflow-hidden bg-white transition-colors ${imgSrc === driveUrl ? 'border-[var(--color-primary)]' : 'border-gray-200 hover:border-[var(--color-primary)]'}`}
+                    >
+                      <img src={driveUrl} alt={`Thumbnail ${idx+1}`} className="w-full h-full object-cover mix-blend-multiply p-1" />
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>

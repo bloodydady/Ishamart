@@ -332,18 +332,18 @@ export default function AdminProducts() {
                   </select>
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Google Drive Image URL *</label>
-                  <input
-                    type="url"
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Google Drive Image URLs *</label>
+                  <textarea
                     name="imageUrl"
                     required
+                    rows="3"
                     value={formData.imageUrl}
                     onChange={handleChange}
-                    placeholder="https://drive.google.com/file/d/..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-primary)] outline-none bg-gray-50 focus:bg-white"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">Must be a shareable Google Drive link.</p>
+                    placeholder="https://drive.google.com/file/d/...&#10;https://drive.google.com/file/d/..."
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-primary)] outline-none bg-gray-50 focus:bg-white resize-none text-sm"
+                  ></textarea>
+                  <p className="text-xs text-gray-500 mt-1">Paste multiple shareable Google Drive links separated by commas or new lines. The first link will be the main image.</p>
                 </div>
 
                 <div className="md:col-span-2 pt-2">
