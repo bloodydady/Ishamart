@@ -8,7 +8,7 @@ import { useCart } from '@/context/CartContext';
 import { getProductById, getProductReviews, addReview, deleteReview } from '@/lib/firestore';
 import { getDriveImageUrl, formatPrice, CATEGORIES, formatDateShort } from '@/lib/utils';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { FiShoppingCart, FiMinus, FiPlus, FiStar, FiTrash2 } from 'react-icons/fi';
+import { FiShoppingCart, FiMinus, FiPlus, FiStar, FiTrash2, FiUser, FiShare2 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 export default function ProductDetail({ params }) {
@@ -76,6 +76,24 @@ export default function ProductDetail({ params }) {
     
     if (success && redirect) {
       router.push('/checkout');
+    }
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: product.name,
+      text: `Check out ${product.name} on ISHAMART!`,
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success('Product link copied to clipboard!');
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
     }
   };
 
@@ -200,9 +218,18 @@ export default function ProductDetail({ params }) {
               </div>
             )}
             
-            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
-              {product.name}
-            </h1>
+            <div className="flex justify-between items-start gap-4 mb-4">
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+                {product.name}
+              </h1>
+              <button 
+                onClick={handleShare} 
+                className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors flex-shrink-0" 
+                title="Share Product"
+              >
+                <FiShare2 size={22} />
+              </button>
+            </div>
             
             <div className="flex items-center gap-4 mb-6">
               <div className="flex items-center text-yellow-400">
