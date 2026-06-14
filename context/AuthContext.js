@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
 import { getUserProfile } from '@/lib/firestore';
-import { isAdminUser } from '@/lib/auth';
+import { isAdminUser, ADMIN_EMAILS } from '@/lib/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 const AuthContext = createContext({});
@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
         const { profile } = await getUserProfile(firebaseUser.uid);
         if (profile) {
           setUserProfile(profile);
-          setIsAdmin(firebaseUser.email === 'monsteroflove1234@gmail.com' || profile.role === 'admin');
+          setIsAdmin(ADMIN_EMAILS.includes(firebaseUser.email) || profile.role === 'admin');
         } else {
           // Auto-create user profile if it doesn't exist in Firestore
           // This handles the case where the database was created after the user registered
@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
               email: firebaseUser.email || '',
               phone: firebaseUser.phoneNumber || '',
               blocked: false,
-              role: firebaseUser.email === 'monsteroflove1234@gmail.com' ? 'admin' : 'user',
+              role: ADMIN_EMAILS.includes(firebaseUser.email) ? 'admin' : 'user',
               createdAt: serverTimestamp(),
             };
             await setDoc(doc(db, 'users', firebaseUser.uid), newProfile);
@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
           } catch (err) {
             console.error('Failed to auto-create user profile:', err);
           }
-          setIsAdmin(firebaseUser.email === 'monsteroflove1234@gmail.com');
+          setIsAdmin(ADMIN_EMAILS.includes(firebaseUser.email));
         }
       } else {
         setUser(null);
