@@ -19,7 +19,10 @@ export default function AdminUsers() {
 
   const fetchUsers = async () => {
     setLoading(true);
-    const { users: data } = await getAllUsers();
+    const { users: data, error } = await getAllUsers();
+    if (error) {
+      toast.error('Failed to load users: ' + error);
+    }
     setUsers(data || []);
     setLoading(false);
   };
@@ -51,7 +54,7 @@ export default function AdminUsers() {
   const filteredUsers = users.filter(user => {
     const matchesSearch = 
       (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) || 
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.email && user.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (user.phone && user.phone.includes(searchTerm));
       
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
